@@ -82,7 +82,6 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message
   alert(msg);
 }
 
@@ -108,7 +107,7 @@ function handleClick(evt) {
   }
 
   // check for tie
-  if (board.flat().every(cell => cell)) {
+  if (board.flat().every(cell => cell)) {//TODO: change condition to !== null could also just check if top row is full
     return endGame(`Tie game!`);
   }
   // switch players
@@ -125,9 +124,13 @@ function checkForWin() {
    * currPlayer
    */
   function _win(cells) {
-
-    return cells.every(([y, x]) => y >= 0 && y < HEIGHT && x >= 0 && x < WIDTH && board[y][x] === currPlayer);
-
+    return cells.every(
+      ([y, x]) =>
+        y >= 0 &&
+        y < HEIGHT &&
+        x >= 0 &&
+        x < WIDTH &&
+        board[y][x] === currPlayer);
   }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
@@ -138,7 +141,7 @@ function checkForWin() {
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
       let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      let diagDL = [[y, WIDTH - x], [y + 1, WIDTH - x - 1], [y + 2, WIDTH - x - 2], [y + 3, WIDTH - x - 3]];
+      let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
       let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
 
       // find winner (only checking each win-possibility as needed)
