@@ -19,7 +19,7 @@ const board = []; // array of rows, each row is array of cells  (board[y][x])
 
 function makeBoard() {
   for (let y = 0; y < HEIGHT; y++) {
-    board.push(Array.from({length: WIDTH}).fill(null));
+    board.push(Array.from({ length: WIDTH }).fill(null));
   }
 }
 
@@ -74,7 +74,7 @@ function placeInTable(y, x) {
 
   const cell = document.getElementById(`c-${y}-${x}`);
   const piece = document.createElement('div');
-  piece.classList.add('piece',`p${currPlayer}`);
+  piece.classList.add('piece', `p${currPlayer}`);
   cell.append(piece);
 
 }
@@ -83,6 +83,7 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -107,8 +108,9 @@ function handleClick(evt) {
   }
 
   // check for tie
-  if (board.every(cell => !cell)) return endGame(`Tie game!`);
-
+  if (board.flat().every(cell => cell)) {
+    return endGame(`Tie game!`);
+  }
   // switch players
   currPlayer = currPlayer === 1 ? 2 : 1;
 }
@@ -124,25 +126,20 @@ function checkForWin() {
    */
   function _win(cells) {
 
-    // TODO: Check four cells to see if they're all legal & all color of current
-    // player
+    return cells.every(([y, x]) => y >= 0 && y < HEIGHT && x >= 0 && x < WIDTH && board[y][x] === currPlayer);
 
   }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
   // for 4 cells (starting here) for each of the different
   // ways to win: horizontal, vertical, diagonalDR, diagonalDL
-  for (var y = 0; y < HEIGHT; y++) {
-    for (var x = 0; x < WIDTH; x++) {
-      // TODO: assign values to the below variables for each of the ways to win
-      // horizontal has been assigned for you
-      // each should be an array of 4 cell coordinates:
-      // [ [y, x], [y, x], [y, x], [y, x] ]
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert;
-      let diagDL;
-      let diagDR;
+      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      let diagDL = [[y, WIDTH - x], [y + 1, WIDTH - x - 1], [y + 2, WIDTH - x - 2], [y + 3, WIDTH - x - 3]];
+      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
 
       // find winner (only checking each win-possibility as needed)
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
